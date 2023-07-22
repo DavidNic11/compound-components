@@ -3,7 +3,6 @@ import {
   FC,
   ReactElement,
   ReactNode,
-  cloneElement,
   createContext,
   isValidElement,
   useContext,
@@ -11,20 +10,20 @@ import {
 } from "react";
 import { throwError } from "../../shared/utilities";
 
-import sharedStyles from "./Shared.module.scss";
 import tableStyles from "./Table.module.scss";
-import tableHeadStyles from "./TableHead.module.scss";
-import cn from "classnames";
+import { TableBody, TableBodyProps } from "./TableBody";
+import { TableRowEmbed, TableRowProps } from "./TableRow";
+import { TableColumnProps, TableHead, TableHeadProps } from "./TableHead";
 
-interface TableColumn {
+export interface TableColumnValues {
   summary: boolean;
   sticky: boolean;
   label: string;
   transform: (value: any) => ReactNode;
 }
 
-interface TableContextValues {
-  columns: Array<TableColumn>;
+export interface TableContextValues {
+  columns: Array<TableColumnValues>;
   embeddable: boolean;
   variant: "full" | "compact";
 }
@@ -35,7 +34,7 @@ function identity<TData>(data: TData): TData {
 
 const TableContext = createContext<TableContextValues | null>(null);
 
-const useTable = () => {
+export const useTable = () => {
   return useContext(TableContext) ?? throwError("");
 };
 
@@ -58,9 +57,10 @@ const TableProvider: FC<TableProviderProps> = ({
 
 interface TableProps {
   children: ReactNode;
+  passedVariant?: TableContextValues["variant"];
 }
 
-export const Table: FC<TableProps> = ({ children }) => {
+export const Table: FC<TableProps> = ({ children, passedVariant }) => {
   const [variant, setVariant] = useState<TableContextValues["variant"]>("full");
 
   const embeddable = (() => {
@@ -110,98 +110,11 @@ export const Table: FC<TableProps> = ({ children }) => {
 
   return (
     <div className={tableStyles.table}>
-      <TableProvider {...{ variant, columns, embeddable }}>
+      <TableProvider
+        {...{ variant: passedVariant || variant, columns, embeddable }}
+      >
         {children}
       </TableProvider>
     </div>
   );
-};
-
-interface TableHeadProps {
-  children: ReactNode;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TableColumnProps extends Partial<Omit<TableColumn, "label">> {
-  children: string;
-}
-
-export const TableHead: FC<TableHeadProps> = ({ children }) => {
-  const { embeddable } = useTable();
-
-  return (
-    <div className={cn(sharedStyles.row, tableHeadStyles.head)}>
-      {embeddable && <div className={cn(sharedStyles.column)}>chev</div>}
-      {children}
-    </div>
-  );
-};
-
-export const TableColumn: FC<TableColumnProps> = ({ children }) => {
-  return <div className={sharedStyles.column}>{children}</div>;
-};
-
-interface TableBodyProps {
-  children: ReactNode;
-}
-
-export const TableBody: FC<TableBodyProps> = ({ children }) => {
-  return <div>{children}</div>;
-};
-
-interface TableRowProps {
-  variant?: "highlighted" | "default";
-  children: ReactNode;
-}
-
-export const TableRow: FC<TableRowProps> = ({ children }) => {
-  const { columns, embeddable } = useTable();
-
-  const newChildren = Children.toArray(children).map((child, columnIndex) => {
-    const rowItem = child as ReactElement<RowItemsProps>;
-    const column = columns[columnIndex];
-
-    return cloneElement(rowItem, {
-      ...rowItem.props,
-      ...column,
-    });
-  });
-
-  return (
-    <>
-      <div className={sharedStyles.row}>
-        {embeddable && <div className={sharedStyles["row-item"]}>chev</div>}
-        {newChildren}
-      </div>
-    </>
-  );
-};
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface InternalRowItemsProps extends TableColumn {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RowItemsProps extends InternalRowItemsProps {
-  children: ReactNode;
-}
-
-const _TableRowItem: FC<RowItemsProps> = ({
-  children,
-  sticky,
-  summary,
-  transform,
-}) => {
-  return <div className={sharedStyles["row-item"]}>{transform(children)}</div>;
-};
-
-export const TableRowItem = _TableRowItem as FC<
-  Omit<RowItemsProps, keyof InternalRowItemsProps>
->;
-
-interface TableRowEmbedProps {
-  children: ReactNode;
-}
-
-export const TableRowEmbed: FC<TableRowEmbedProps> = ({ children }) => {
-  return <div>{children}</div>;
 };

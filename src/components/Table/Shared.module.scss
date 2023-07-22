@@ -1,9 +1,9 @@
 .row {
   display: grid;
 
-  &:nth-child(even) {
-    background-color: aquamarine;
-  }
+  //   &:nth-child(even) {
+  //     background-color: aquamarine;
+  //   }
 }
 
 .column,
