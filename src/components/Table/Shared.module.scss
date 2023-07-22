@@ -1,0 +1,12 @@
+.row {
+  display: grid;
+
+  &:nth-child(even) {
+    background-color: aquamarine;
+  }
+}
+
+.column,
+.row-item {
+  grid-row: 1;
+}

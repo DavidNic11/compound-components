@@ -1,5 +1,5 @@
 import { ComponentProps, FC, ReactNode, useState } from "react";
-import { DropdownProvider, useDropdown } from "./DropDownContext";
+import { DropdownProvider, useDropdown } from "./DropdownContext";
 import classNames from "classnames";
 
 import styles from "./Dropdown.module.scss";
