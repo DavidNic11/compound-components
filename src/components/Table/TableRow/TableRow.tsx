@@ -1,5 +1,5 @@
 import { ReactNode, FC, cloneElement, Children, ReactElement } from "react";
-import { useTable } from "../Table";
+import { TableColumnValues, useTable } from "../Table";
 
 import { CompactWrapper } from "./TableRowCompact";
 import { FullWrapper } from "./TableRowFull";
@@ -13,7 +13,20 @@ export interface TableRowProps {
 export const TableRow: FC<TableRowProps> = ({ children }) => {
   const { columns, variant } = useTable();
 
-  const newChildren = Children.toArray(children).map((child, columnIndex) => {
+  const enrichedChildren = getEnrichedChildren(children, columns);
+
+  if (variant === "compact") {
+    return <CompactWrapper>{enrichedChildren}</CompactWrapper>;
+  }
+
+  return <FullWrapper>{enrichedChildren}</FullWrapper>;
+};
+
+const getEnrichedChildren = (
+  children: ReactNode,
+  columns: TableColumnValues[]
+): ReactNode => {
+  return Children.toArray(children).map((child, columnIndex) => {
     const rowItem = child as ReactElement<RowItemsProps>;
     const column = columns[columnIndex];
 
@@ -22,10 +35,4 @@ export const TableRow: FC<TableRowProps> = ({ children }) => {
       ...column,
     });
   });
-
-  if (variant === "compact") {
-    return <CompactWrapper>{newChildren}</CompactWrapper>;
-  }
-
-  return <FullWrapper>{newChildren}</FullWrapper>;
 };
