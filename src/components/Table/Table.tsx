@@ -1,17 +1,22 @@
 import { Children, FC, ReactElement, ReactNode, isValidElement } from "react";
 import { throwError } from "../../shared/utilities";
 
-import tableStyles from "./Table.module.scss";
-import { TableBody, TableBodyProps } from "./TableBody";
-import { TableRowEmbed, TableRowProps } from "./TableRow";
-import { TableColumnProps, TableHead, TableHeadProps } from "./TableHead";
+import { TableBody, TableBodyProps } from "./components/TableBody/TableBody";
+import { TableRowEmbed, TableRowProps } from "./components/TableRow";
+import {
+  TableColumnProps,
+  TableHead,
+  TableHeadProps,
+} from "./components/TableHead";
+
 import {
   TableColumnValues,
   TableContextValues,
   TableProvider,
 } from "./TableContext";
-import { useTableVariant } from "./useTableVariant";
+import { useTableVariant } from "./hooks/useTableVariant";
 
+import tableStyles from "./Table.module.scss";
 interface TableProps {
   children: ReactNode;
   variant?: TableContextValues["variant"];

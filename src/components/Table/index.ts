@@ -1,4 +1,5 @@
 export * from "./Table";
-export * from "./TableBody";
-export * from "./TableHead";
-export * from "./TableRow";
+export * from "./components/TableBody/TableBody";
+
+export * from "./components/TableHead";
+export * from "./components/TableRow";
