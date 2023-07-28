@@ -2,8 +2,8 @@ import { FC, ReactNode } from "react";
 import cn from "classnames";
 import { TableColumnValues, useTable } from "../../TableContext";
 
-import sharedStyles from "./Shared.module.scss";
-import tableHeadStyles from "./TableHead.module.scss";
+import sharedStyles from "../../shared/styles/Shared.module.scss";
+import styles from "./TableHead.module.scss";
 
 export interface TableHeadProps {
   children: ReactNode;
@@ -22,7 +22,7 @@ export const TableHead: FC<TableHeadProps> = ({ children }) => {
   }
 
   return (
-    <div className={cn(sharedStyles.row, tableHeadStyles.head)}>
+    <div className={cn(sharedStyles.row, styles.head)}>
       {embeddable && <div className={cn(sharedStyles.column)}>chev</div>}
       {children}
     </div>

@@ -1,6 +1,6 @@
 import { ReactNode, FC, cloneElement, Children, ReactElement } from "react";
-import { TableColumnValues, useTable } from "../../TableContext";
 
+import { TableColumnValues, useTable } from "../../TableContext";
 import { CompactWrapper } from "./TableRowCompact";
 import { FullWrapper } from "./TableRowFull";
 import { RowItemsProps } from "./components/TableRowItem";

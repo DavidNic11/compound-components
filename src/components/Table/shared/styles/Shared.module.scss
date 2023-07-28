@@ -1,0 +1,8 @@
+.row {
+  display: grid;
+}
+
+.column,
+.row-item {
+  grid-row: 1;
+}

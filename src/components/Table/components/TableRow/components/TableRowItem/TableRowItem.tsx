@@ -1,15 +1,13 @@
-/* eslint-disable react-refresh/only-export-components */
 import { FC, ReactNode } from "react";
 import { TableColumnValues, useTable } from "../../../../TableContext";
 
-import sharedStyles from "../../../Shared.module.scss";
+import sharedStyles from "../../../../shared/styles/Shared.module.scss";
 
 import compactStyles from "./CompactRowItem.module.scss";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface InternalRowItemsProps extends TableColumnValues {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RowItemsProps extends InternalRowItemsProps {
   children: ReactNode;
 }

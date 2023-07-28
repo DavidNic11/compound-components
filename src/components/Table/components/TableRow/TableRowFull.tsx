@@ -2,7 +2,7 @@ import { ReactNode, FC } from "react";
 
 import { useTable } from "../../TableContext";
 
-import sharedStyles from "../Shared.module.scss";
+import sharedStyles from "../../shared/styles/Shared.module.scss";
 
 interface FullWrapperProps {
   children?: ReactNode;
