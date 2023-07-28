@@ -14,15 +14,11 @@ import {
 } from "./components/Table";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <Table>
         <TableHead>
-          <TableColumn
-            transform={(value) => "xxx_" + (value as string) + "_xxx"}
-          >
+          <TableColumn transform={(value: string) => "xxx_" + value + "_xxx"}>
             example
           </TableColumn>
           <TableColumn
@@ -31,50 +27,43 @@ function App() {
           >
             sticky
           </TableColumn>
-          <TableColumn
-            summary
-            transform={(value) => "zzz_" + (value as string) + "_zzz"}
-          >
-            summary
-          </TableColumn>
+          <TableColumn summary>summary</TableColumn>
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableRowItem>example 0</TableRowItem>
+            <TableRowItem>test</TableRowItem>
             <TableRowItem>sticky 0</TableRowItem>
             <TableRowItem>summary 0</TableRowItem>
           </TableRow>
 
           <TableRow>
-            <TableRowItem>example 1</TableRowItem>
+            <TableRowItem>test</TableRowItem>
             <TableRowItem>sticky 1</TableRowItem>
             <TableRowItem>summary 1</TableRowItem>
           </TableRow>
 
           <TableRow>
-            <TableRowItem>example 2</TableRowItem>
+            <TableRowItem>test</TableRowItem>
             <TableRowItem>sticky 2</TableRowItem>
             <TableRowItem>summary 2</TableRowItem>
           </TableRow>
         </TableBody>
       </Table>
 
-      <Table passedVariant="compact">
+      <Table variant="compact">
         <TableHead>
-          <TableColumn
-            transform={(value) => "xxx_" + (value as string) + "_xxx"}
-          >
+          <TableColumn transform={(value: string) => "xxx_" + value + "_xxx"}>
             example
           </TableColumn>
           <TableColumn
             sticky
-            transform={(value) => "yyy_" + (value as string) + "_yyy"}
+            transform={(value: string) => "yyy_" + value + "_yyy"}
           >
             sticky
           </TableColumn>
           <TableColumn
             summary
-            transform={(value) => "zzz_" + (value as string) + "_zzz"}
+            transform={(value: string) => "zzz_" + value + "_zzz"}
           >
             summary
           </TableColumn>
@@ -146,5 +135,3 @@ function App() {
 }
 
 export default App;
-
-//

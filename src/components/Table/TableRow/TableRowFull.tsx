@@ -1,6 +1,8 @@
 import { ReactNode, FC } from "react";
+
+import { useTable } from "../TableContext";
+
 import sharedStyles from "../Shared.module.scss";
-import { useTable } from "..";
 
 interface FullWrapperProps {
   children?: ReactNode;

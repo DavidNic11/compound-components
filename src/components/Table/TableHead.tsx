@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import cn from "classnames";
-import { TableColumnValues, useTable } from "./Table";
+import { TableColumnValues, useTable } from "./TableContext";
 
 import sharedStyles from "./Shared.module.scss";
 import tableHeadStyles from "./TableHead.module.scss";

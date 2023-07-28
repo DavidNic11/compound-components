@@ -1,120 +1,86 @@
-import {
-  Children,
-  FC,
-  ReactElement,
-  ReactNode,
-  createContext,
-  isValidElement,
-  useContext,
-  useState,
-} from "react";
+import { Children, FC, ReactElement, ReactNode, isValidElement } from "react";
 import { throwError } from "../../shared/utilities";
 
 import tableStyles from "./Table.module.scss";
 import { TableBody, TableBodyProps } from "./TableBody";
 import { TableRowEmbed, TableRowProps } from "./TableRow";
 import { TableColumnProps, TableHead, TableHeadProps } from "./TableHead";
-
-export interface TableColumnValues {
-  summary: boolean;
-  sticky: boolean;
-  label: string;
-  transform: (value: any) => ReactNode;
-}
-
-export interface TableContextValues {
-  columns: Array<TableColumnValues>;
-  embeddable: boolean;
-  variant: "full" | "compact";
-}
-
-function identity<TData>(data: TData): TData {
-  return data;
-}
-
-const TableContext = createContext<TableContextValues | null>(null);
-
-export const useTable = () => {
-  return useContext(TableContext) ?? throwError("");
-};
-
-interface TableProviderProps extends TableContextValues {
-  children: ReactNode;
-}
-
-const TableProvider: FC<TableProviderProps> = ({
-  children,
-  variant,
-  columns,
-  embeddable,
-}) => {
-  return (
-    <TableContext.Provider value={{ variant, columns, embeddable }}>
-      {children}
-    </TableContext.Provider>
-  );
-};
+import {
+  TableColumnValues,
+  TableContextValues,
+  TableProvider,
+} from "./TableContext";
+import { useTableVariant } from "./useTableVariant";
 
 interface TableProps {
   children: ReactNode;
-  passedVariant?: TableContextValues["variant"];
+  variant?: TableContextValues["variant"];
 }
 
-export const Table: FC<TableProps> = ({ children, passedVariant }) => {
-  const [variant, setVariant] = useState<TableContextValues["variant"]>("full");
+export const Table: FC<TableProps> = ({ children, variant: variantProp }) => {
+  const variant = useTableVariant(variantProp);
 
-  const embeddable = (() => {
-    const tableBody = Children.toArray(children)
-      .filter(isValidElement)
-      .find((child) => {
-        return child.type === TableBody;
-      }) as ReactElement<TableBodyProps> | undefined;
-
-    if (!tableBody) {
-      throwError("need body");
-    }
-
-    return Children.toArray(tableBody?.props.children).some((child) => {
-      const row = child as ReactElement<TableRowProps>;
-
-      return Children.toArray(row.props.children)
-        .filter(isValidElement)
-        .some((child) => child.type === TableRowEmbed);
-    });
-  })();
-
-  const columns = (() => {
-    const tableHead = Children.toArray(children)
-      .filter(isValidElement)
-      .find((child) => child.type === TableHead) as
-      | ReactElement<TableHeadProps>
-      | undefined;
-
-    if (!tableHead) {
-      throwError("need a head");
-    }
-
-    return Children.toArray(tableHead?.props.children).map((child) => {
-      const tableColumn = child as ReactElement<Required<TableColumnProps>>;
-
-      const { sticky, summary, transform, children } = tableColumn.props;
-
-      return {
-        sticky,
-        summary,
-        label: children,
-        transform: transform || identity,
-      };
-    });
-  })();
+  const embeddable = getEmbeddable(children);
+  const columns = getColumns(children);
 
   return (
     <div className={tableStyles.table}>
       <TableProvider
-        {...{ variant: passedVariant || variant, columns, embeddable }}
+        variant={variant}
+        columns={columns}
+        embeddable={embeddable}
       >
         {children}
       </TableProvider>
     </div>
   );
 };
+
+const getEmbeddable = (children: ReactNode): boolean => {
+  const tableBody = Children.toArray(children)
+    .filter(isValidElement)
+    .find((child) => {
+      return child.type === TableBody;
+    }) as ReactElement<TableBodyProps> | undefined;
+
+  if (!tableBody) {
+    throwError("need body");
+  }
+
+  return Children.toArray(tableBody?.props.children).some((child) => {
+    const row = child as ReactElement<TableRowProps>;
+
+    return Children.toArray(row.props.children)
+      .filter(isValidElement)
+      .some((child) => child.type === TableRowEmbed);
+  });
+};
+
+const getColumns = (children: ReactNode): TableColumnValues[] => {
+  const tableHead = Children.toArray(children)
+    .filter(isValidElement)
+    .find((child) => child.type === TableHead) as
+    | ReactElement<TableHeadProps>
+    | undefined;
+
+  if (!tableHead) {
+    throwError("need a head");
+  }
+
+  return Children.toArray(tableHead?.props.children).map((child) => {
+    const tableColumn = child as ReactElement<Required<TableColumnProps>>;
+
+    const { sticky, summary, transform, children } = tableColumn.props;
+
+    return {
+      sticky,
+      summary,
+      label: children,
+      transform: transform || identity,
+    };
+  });
+};
+
+function identity<TData>(data: TData): TData {
+  return data;
+}

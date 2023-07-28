@@ -6,6 +6,7 @@ import {
   isValidElement,
   useState,
 } from "react";
+
 import { RowItemsProps } from "./components/TableRowItem";
 
 interface TableRowCompactProps {

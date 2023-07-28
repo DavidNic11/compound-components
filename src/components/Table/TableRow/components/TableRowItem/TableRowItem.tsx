@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { FC, ReactNode } from "react";
-import { TableColumnValues, useTable } from "../../..";
+import { TableColumnValues, useTable } from "../../../TableContext";
 
 import sharedStyles from "../../../Shared.module.scss";
 
