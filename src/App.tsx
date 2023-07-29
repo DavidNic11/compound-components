@@ -12,10 +12,16 @@ import {
   TableRowEmbed,
   TableRowItem,
 } from "./components/Table";
+import { TabItem, Tabs } from "./components/Tabs";
 
 function App() {
   return (
     <>
+      <Tabs>
+        <TabItem label="child 0">child 0</TabItem>
+        <TabItem label="child 1">child 1</TabItem>
+        <TabItem label="child 2">child 2</TabItem>
+      </Tabs>
       <Table>
         <TableHead>
           <TableColumn transform={(value: string) => "xxx_" + value + "_xxx"}>

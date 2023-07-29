@@ -1,5 +1,5 @@
 import { ReactNode, FC, createContext, useContext } from "react";
-import { throwError } from "../../../shared/utilities";
+import { throwError } from "../../shared/utilities";
 
 interface DropdownContext {
   selectedValue: string;
