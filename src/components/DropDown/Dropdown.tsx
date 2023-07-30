@@ -1,20 +1,8 @@
-import { ComponentProps, FC, ReactNode, useState } from "react";
+import type { FC, ReactNode } from "react";
+
+import { useState } from "react";
+
 import { DropdownProvider, useDropdown } from "./DropdownContext";
-import classNames from "classnames";
-
-import styles from "./Dropdown.module.scss";
-
-const Button: FC<ComponentProps<"button">> = ({
-  children,
-  className,
-  ...rest
-}) => {
-  return (
-    <button className={classNames(styles.button, className)} {...rest}>
-      {children}
-    </button>
-  );
-};
 
 interface DropdownProps {
   children?: ReactNode;
@@ -24,6 +12,7 @@ interface DropdownProps {
 export const Dropdown: FC<DropdownProps> = ({ children, ...rest }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <DropdownProvider
       selectedValue={selectedValue}
@@ -39,36 +28,34 @@ export const Dropdown: FC<DropdownProps> = ({ children, ...rest }) => {
 const InternalDropdown: FC<DropdownProps> = ({ children, label }) => {
   const { isOpen, setIsOpen, selectedValue } = useDropdown();
 
+  const { container, button, list } = useDropdownStyles();
+
   return (
-    <div className={classNames(styles["dropdown-container"])}>
-      <Button
-        className={styles["selected-container"]}
+    <div {...container}>
+      <button
+        {...button}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
       >
         {selectedValue || label}
-      </Button>
-      {isOpen && <div className={styles["dropdown-list"]}>{children}</div>}
+      </button>
+      {isOpen && <div {...list}>{children}</div>}
     </div>
   );
 };
 
-interface DropdownItemProps {
-  value: string;
-  children?: ReactNode;
-}
-export const DropdownItem: FC<DropdownItemProps> = ({ value, children }) => {
-  const { setSelectedValue, setIsOpen } = useDropdown();
-
-  return (
-    <Button
-      onClick={() => {
-        setSelectedValue(value);
-        setIsOpen(false);
-      }}
-    >
-      {children}
-    </Button>
-  );
+const useDropdownStyles = () => {
+  return {
+    container: {
+      className: "p-2 relative text-center border border-violet-800",
+    },
+    button: {
+      className: "w-full",
+    },
+    list: {
+      className:
+        "absolute top-full bg-white w-full left-0 z-10 w-100 drop-shadow-lg rounded-sm",
+    },
+  };
 };
