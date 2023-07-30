@@ -10,7 +10,6 @@ export interface TableColumnValues {
 
 export interface TableContextValues {
   columns: Array<TableColumnValues>;
-  embeddable: boolean;
   variant: "full" | "compact";
 }
 
@@ -28,10 +27,9 @@ export const TableProvider: FC<TableProviderProps> = ({
   children,
   variant,
   columns,
-  embeddable,
 }) => {
   return (
-    <TableContext.Provider value={{ variant, columns, embeddable }}>
+    <TableContext.Provider value={{ variant, columns }}>
       {children}
     </TableContext.Provider>
   );

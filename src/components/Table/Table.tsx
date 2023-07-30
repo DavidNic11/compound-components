@@ -1,8 +1,6 @@
 import { Children, FC, ReactElement, ReactNode, isValidElement } from "react";
 import { throwError } from "../../shared/utilities";
 
-import { TableBody, TableBodyProps } from "./components/TableBody/TableBody";
-import { TableRowEmbed, TableRowProps } from "./components/TableRow";
 import {
   TableColumnProps,
   TableHead,
@@ -16,7 +14,6 @@ import {
 } from "./TableContext";
 import { useTableVariant } from "./hooks/useTableVariant";
 
-import tableStyles from "./Table.module.scss";
 interface TableProps {
   children: ReactNode;
   variant?: TableContextValues["variant"];
@@ -25,40 +22,15 @@ interface TableProps {
 export const Table: FC<TableProps> = ({ children, variant: variantProp }) => {
   const variant = useTableVariant(variantProp);
 
-  const embeddable = getEmbeddable(children);
   const columns = getColumns(children);
 
   return (
     <div className="w-full">
-      <TableProvider
-        variant={variant}
-        columns={columns}
-        embeddable={embeddable}
-      >
+      <TableProvider variant={variant} columns={columns}>
         {children}
       </TableProvider>
     </div>
   );
-};
-
-const getEmbeddable = (children: ReactNode): boolean => {
-  const tableBody = Children.toArray(children)
-    .filter(isValidElement)
-    .find((child) => {
-      return child.type === TableBody;
-    }) as ReactElement<TableBodyProps> | undefined;
-
-  if (!tableBody) {
-    throwError("need body");
-  }
-
-  return Children.toArray(tableBody?.props.children).some((child) => {
-    const row = child as ReactElement<TableRowProps>;
-
-    return Children.toArray(row.props.children)
-      .filter(isValidElement)
-      .some((child) => child.type === TableRowEmbed);
-  });
 };
 
 const getColumns = (children: ReactNode): TableColumnValues[] => {
