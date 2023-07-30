@@ -1,9 +1,8 @@
 import { FC, ReactNode } from "react";
-import cn from "classnames";
+
 import { TableColumnValues, useTable } from "../../TableContext";
 
 import sharedStyles from "../../shared/styles/Shared.module.scss";
-import styles from "./TableHead.module.scss";
 
 export interface TableHeadProps {
   children: ReactNode;
@@ -15,20 +14,21 @@ export interface TableColumnProps
 }
 
 export const TableHead: FC<TableHeadProps> = ({ children }) => {
-  const { embeddable, variant } = useTable();
+  const { variant, columns } = useTable();
 
   if (variant === "compact") {
     return null;
   }
 
   return (
-    <div className={cn(sharedStyles.row, styles.head)}>
-      {embeddable && <div className={cn(sharedStyles.column)}>chev</div>}
+    <div
+      className={`py-2 border-b border-violet-900 text-violet-900 bg-violet-50 font-bold grid grid-cols-${columns.length}`}
+    >
       {children}
     </div>
   );
 };
 
 export const TableColumn: FC<TableColumnProps> = ({ children }) => {
-  return <div className={sharedStyles.column}>{children}</div>;
+  return <div>{children}</div>;
 };

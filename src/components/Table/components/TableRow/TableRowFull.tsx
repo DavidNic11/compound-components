@@ -2,18 +2,15 @@ import { ReactNode, FC } from "react";
 
 import { useTable } from "../../TableContext";
 
-import sharedStyles from "../../shared/styles/Shared.module.scss";
-
 interface FullWrapperProps {
   children?: ReactNode;
 }
 
 export const FullWrapper: FC<FullWrapperProps> = ({ children }) => {
-  const { embeddable } = useTable();
+  const { columns } = useTable();
 
   return (
-    <div className={sharedStyles.row}>
-      {embeddable && <div className={sharedStyles["row-item"]}>chev</div>}
+    <div className={`py-2 border-b grid grid-cols-${columns.length}`}>
       {children}
     </div>
   );

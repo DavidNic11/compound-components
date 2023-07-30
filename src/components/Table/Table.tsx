@@ -29,7 +29,7 @@ export const Table: FC<TableProps> = ({ children, variant: variantProp }) => {
   const columns = getColumns(children);
 
   return (
-    <div className={tableStyles.table}>
+    <div className="w-full">
       <TableProvider
         variant={variant}
         columns={columns}
