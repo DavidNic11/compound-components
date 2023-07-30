@@ -2,7 +2,7 @@ import type { FC } from "react";
 
 import cn from "classnames";
 
-import { useTabs } from "./TabContext";
+import { useTabs } from "../../TabContext";
 
 interface TabListProps {
   labels: string[];

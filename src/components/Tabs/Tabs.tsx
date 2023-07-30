@@ -6,17 +6,28 @@ import {
   isValidElement,
   useCallback,
 } from "react";
-import { TabProvider } from "./TabContext";
-import { useControlledState } from "../../shared/hooks/useControlledState";
-import { TabItem, TabItemProps } from "./TabItem";
-import { throwError } from "../../shared/utilities";
-import { TabList } from "./TabList";
 
+import { TabProvider } from "./TabContext";
+import { TabItem, TabItemProps } from "./components/TabItem/TabItem";
+import { TabList } from "./components/TabList/TabList";
+
+import { useControlledState } from "../../shared/hooks/useControlledState";
 interface TabProps {
   children: ReactNode;
   activeTab?: string;
   onTabChange?: (newTab: string) => void;
 }
+
+export const Tabs: FC<TabProps> = (props) => {
+  const { labels, ...providerProps } = useFormattedTabs(props);
+
+  return (
+    <TabProvider {...providerProps}>
+      <TabList labels={labels} />
+      <div>{props.children}</div>
+    </TabProvider>
+  );
+};
 
 const useFormattedTabs = ({
   children,
@@ -57,15 +68,4 @@ const getLabels = (children: ReactNode) => {
 
       return tabItem.props.label;
     });
-};
-
-export const Tabs: FC<TabProps> = (props) => {
-  const { labels, ...providerProps } = useFormattedTabs(props);
-
-  return (
-    <TabProvider {...providerProps}>
-      <TabList labels={labels} />
-      <div>{props.children}</div>
-    </TabProvider>
-  );
 };

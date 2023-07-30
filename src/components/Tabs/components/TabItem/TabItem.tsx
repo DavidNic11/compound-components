@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { useTabs } from "./TabContext";
+import { useTabs } from "../../TabContext";
 
 export interface TabItemProps {
   label: string;

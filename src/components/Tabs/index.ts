@@ -14,4 +14,4 @@
 
  */
 export * from "./Tabs";
-export * from "./TabItem";
+export * from "./components/TabItem/TabItem";

@@ -1,8 +1,10 @@
-import type { FC, ReactNode } from "react";
+import { FC, ReactNode, useCallback, useRef } from "react";
 
 import { useState } from "react";
 
 import { DropdownProvider, useDropdown } from "./DropdownContext";
+import { useEscapeKey } from "../../shared/hooks/useEscapeKey";
+import { useOnClickOutside } from "../../shared/hooks/useClickOutside";
 
 interface DropdownProps {
   children?: ReactNode;
@@ -12,6 +14,8 @@ interface DropdownProps {
 export const Dropdown: FC<DropdownProps> = ({ children, ...rest }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
+  useEscapeKey(useCallback(() => setIsOpen(false), []));
 
   return (
     <DropdownProvider
@@ -26,12 +30,18 @@ export const Dropdown: FC<DropdownProps> = ({ children, ...rest }) => {
 };
 
 const InternalDropdown: FC<DropdownProps> = ({ children, label }) => {
-  const { isOpen, setIsOpen, selectedValue } = useDropdown();
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
+  const { isOpen, setIsOpen, selectedValue } = useDropdown();
   const { container, button, list } = useDropdownStyles();
 
+  useOnClickOutside(
+    dropdownRef,
+    useCallback(() => setIsOpen(false), [])
+  );
+
   return (
-    <div {...container}>
+    <div ref={dropdownRef} {...container}>
       <button
         {...button}
         onClick={() => {
